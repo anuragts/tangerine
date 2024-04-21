@@ -1,0 +1,5 @@
+- Basic KV store use hashmap
+- Create a KV server to handle the requests.
+- Implement KV Client Handing
+- Add KV Snapshots to disks.
+
