@@ -1,2 +1,2 @@
-# tangerine
-in-memory vector database
+# 🍊 tangerine.
+## in-memory vector database
