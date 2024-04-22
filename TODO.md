@@ -2,4 +2,5 @@
 - Create a KV server to handle the requests.
 - Implement KV Client Handing
 - Add KV Snapshots to disks.
-
+- Cloud Support
+- Node SDK
