@@ -2,5 +2,7 @@
 - Create a KV server to handle the requests.
 - Implement KV Client Handing
 - Add KV Snapshots to disks.
-- Cloud Support
+- Pub Sub
+- Binary Executables, Dockerise 
 - Node SDK
+- Cloud Support
