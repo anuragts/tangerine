@@ -1,6 +1,10 @@
 # 🍊 tangerine.
 ## in-memory vector database
 
+tangerine is a in-memory vector database that is designed to have fast read and write speeds.
+
+tangerine is not limited to vector database, as it has its own key-value store written from scratch in Java.
+
 ## Key-Value Store
 ### Running
 
