@@ -3,6 +3,8 @@
 - [X] Implement KV Client Handing
 - [X] Concurrent KV Client Handling
 - Add KV Snapshots to disks.
+- Expire Keys
+- Queue support
 - Pub Sub
 - Transactions
 - Persistence
