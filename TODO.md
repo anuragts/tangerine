@@ -2,7 +2,7 @@
 - [X] Create a KV server to handle the requests.
 - [X] Implement KV Client Handing
 - [X] Concurrent KV Client Handling
-- Add KV Snapshots to disks.
+- [X]Add KV Snapshots to disks.
 - Expire Keys
 - Queue support
 - Pub Sub
