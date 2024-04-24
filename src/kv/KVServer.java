@@ -90,7 +90,6 @@ public class KVServer {
                 }
             }
             // save snapshot every time a command is executed
-
             Map<String, String> d = parser.parseJSON(storage.seeAll());
 
             System.out.println("Server save to json" + d);

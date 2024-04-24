@@ -17,21 +17,20 @@ public class SnapShot {
     private final String filename = "snapshot.json";
 
     public void saveToJSON(Map<String, String> data) {
+        // Read existing data
+        Map<String, String> existingData = readSnapshot();
+
+        // Merge existing data with new data
+        existingData.putAll(data);
+
         // Convert the map to a JSON string
-        String json = JSONParser.toString(data);
+        String json = JSONParser.toString(existingData);
 
         try {
             // Create directory if it doesn't exist
             Files.createDirectories(Paths.get(directory));
         } catch (IOException e) {
             e.printStackTrace();
-        }
-
-        // Check if the existing snapshot is the same as the new data
-        Map<String, String> existingSnapshot = readSnapshot();
-        if(existingSnapshot.equals(data)) {
-            System.out.println("No changes detected in snapshot data. Skipping write operation.");
-            return;
         }
 
         // Write JSON string to file
