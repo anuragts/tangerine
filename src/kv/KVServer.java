@@ -4,22 +4,29 @@ import java.io.*;
 import java.net.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class KVServer {
     private InMemoryStorage storage;
     private ServerSocket serverSocket;
     private ExecutorService executor;
+    private AtomicInteger snapshotCount = new AtomicInteger(0);
+    private File snapshotFile;
 
     public KVServer(InMemoryStorage storage, int port) throws IOException {
         this.storage = storage;
         this.serverSocket = new ServerSocket(port); // create a new server socket
         this.executor = Executors.newFixedThreadPool(10); // fixed no of threads
         System.out.println("KV Server started on port " + port);
+        snapshotFile = new File("snapshots");
+        snapshotFile.mkdirs();
+
     }
 
     public void run() throws IOException {
         while (true) {
-            // accept a connection from the client and handle the request in a separate thread using handleRequest method.
+            // accept a connection from the client and handle the request in a separate
+            // thread using handleRequest method.
             Socket socket = serverSocket.accept();
             executor.submit(() -> {
                 try {
@@ -28,12 +35,27 @@ public class KVServer {
                     e.printStackTrace();
                 }
             });
+            File[] snapshotFiles = snapshotFile.listFiles();
+            if (snapshotFiles != null) {
+                for (File file : snapshotFiles) {
+                    try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            String[] parts = line.split(": ");
+                            storage.set(parts[0], parts[1]);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         }
 
     }
 
     private void handleRequest(Socket socket) throws IOException {
-        // get input stream and output stream from the socket and create a buffered reader and a writer.
+        // get input stream and output stream from the socket and create a buffered
+        // reader and a writer.
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 PrintWriter writer = new PrintWriter(socket.getOutputStream(), true)) {
             String input;
@@ -64,6 +86,18 @@ public class KVServer {
                     writer.println("Unknown command");
                 }
             }
+            // save snapshot every time a command is executed
+            snapshotCount.incrementAndGet();
+            saveSnapshot();
+
+        }
+    }
+
+    private void saveSnapshot() {
+        try (FileWriter writer = new FileWriter("snapshots/snapshot-" + snapshotCount.get() + ".txt")) {
+            writer.write(storage.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

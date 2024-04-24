@@ -1,3 +1,3 @@
 #!/bin/bash
 
-java ./src/kv/KVServer.java
+java ./src/kv/KVServer

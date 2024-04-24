@@ -1,3 +1,3 @@
 #!/bin/bash
 
-java ./src/kv/KVClient.java
+java ./src/kv/KVClient
