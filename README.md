@@ -25,76 +25,35 @@ $ ./tangerinekv-server.sh
 $ ./tangerinekv-cli.sh
 ```
 
-## Commands./src/kv/KVServer.java:8: error: cannot find symbol
-    private InMemoryStorage storage;
-            ^
-  symbol:   class InMemoryStorage
-  location: class KVServer
-./src/kv/KVServer.java:11: error: cannot find symbol
-    public KVServer(InMemoryStorage storage, int port) throws IOException {
-                    ^
-  symbol:   class InMemoryStorage
-  location: class KVServer
-./src/kv/KVServer.java:60: error: cannot find symbol
-        InMemoryStorage storage = new InMemoryStorage();
-        ^
-  symbol:   class InMemoryStorage
-  location: class KVServer
-./src/kv/KVServer.java:60: error: cannot find symbol
-        InMemoryStorage storage = new InMemoryStorage();
-                                      ^
-  symbol:   class InMemoryStorage
-  location: class KVServer
-4 errors
-
+## Commands
 ### set
 
 ```bash
-$ tangerine-cli set key value
+$ set key value
 ```
 
 ### get
 
 ```bash
-$ tangerine-cli get key
-```./src/kv/KVServer.java:8: error: cannot find symbol
-    private InMemoryStorage storage;
-            ^
-  symbol:   class InMemoryStorage
-  location: class KVServer
-./src/kv/KVServer.java:11: error: cannot find symbol
-    public KVServer(InMemoryStorage storage, int port) throws IOException {
-                    ^
-  symbol:   class InMemoryStorage
-  location: class KVServer
-./src/kv/KVServer.java:60: error: cannot find symbol
-        InMemoryStorage storage = new InMemoryStorage();
-        ^
-  symbol:   class InMemoryStorage
-  location: class KVServer
-./src/kv/KVServer.java:60: error: cannot find symbol
-        InMemoryStorage storage = new InMemoryStorage();
-                                      ^
-  symbol:   class InMemoryStorage
-  location: class KVServer
-4 errors
+$  get key
+```
 
 ### remove
 
 ```bash
-$ tangerine-cli remove key
+$  remove key
 ```
 
 ### see all
 
 ```bash
-$ tangerine-cli see all
+$  see all
 ```
 
 ### quit
 
 ```bash
-$ tangerine-cli quit
+$ quit
 ```
 
 ## License
