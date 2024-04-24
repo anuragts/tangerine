@@ -2,29 +2,38 @@ package kv;
 
 import java.io.*;
 import java.net.*;
-// import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class KVServer {
     private InMemoryStorage storage;
     private ServerSocket serverSocket;
+    private ExecutorService executor;
 
     public KVServer(InMemoryStorage storage, int port) throws IOException {
         this.storage = storage;
         this.serverSocket = new ServerSocket(port);
+        this.executor = Executors.newFixedThreadPool(10); // fixed no of threads
         System.out.println("KV Server started on port " + port);
     }
 
     public void run() throws IOException {
         while (true) {
             Socket socket = serverSocket.accept();
-            System.out.println("New connection from " + socket.getInetAddress());
-            handleRequest(socket);
+            executor.submit(() -> {
+                try {
+                    handleRequest(socket);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         }
+
     }
 
     private void handleRequest(Socket socket) throws IOException {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-             PrintWriter writer = new PrintWriter(socket.getOutputStream(), true)) {
+                PrintWriter writer = new PrintWriter(socket.getOutputStream(), true)) {
             String input;
             while ((input = reader.readLine()) != null) {
                 String[] parts = input.split(" ");
