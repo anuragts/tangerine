@@ -1,7 +1,7 @@
-- Basic KV store use hashmap
-- Create a KV server to handle the requests.
-- Implement KV Client Handing
-- Concurrent KV Client Handling
+- [X] Basic KV store use hashmap 
+- [X] Create a KV server to handle the requests.
+- [X] Implement KV Client Handing
+- [X] Concurrent KV Client Handling
 - Add KV Snapshots to disks.
 - Pub Sub
 - Transactions
