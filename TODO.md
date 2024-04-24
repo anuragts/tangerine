@@ -6,6 +6,7 @@
 - Pub Sub
 - Transactions
 - Persistence
+- Tangerine config file
 - Binary Executables, Dockerise 
 - Node SDK
 - Cloud Support

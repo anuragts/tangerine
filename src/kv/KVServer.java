@@ -2,15 +2,15 @@ package kv;
 
 import java.io.*;
 import java.net.*;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
+import utils.*;
 
 public class KVServer {
     private InMemoryStorage storage;
     private ServerSocket serverSocket;
     private ExecutorService executor;
-    private AtomicInteger snapshotCount = new AtomicInteger(0);
     private File snapshotFile;
 
     public KVServer(InMemoryStorage storage, int port) throws IOException {
@@ -56,6 +56,9 @@ public class KVServer {
     private void handleRequest(Socket socket) throws IOException {
         // get input stream and output stream from the socket and create a buffered
         // reader and a writer.
+        SnapShot snapShot = new SnapShot();
+        JSONParser parser = new JSONParser();
+
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 PrintWriter writer = new PrintWriter(socket.getOutputStream(), true)) {
             String input;
@@ -87,19 +90,16 @@ public class KVServer {
                 }
             }
             // save snapshot every time a command is executed
-            snapshotCount.incrementAndGet();
-            saveSnapshot();
+
+            Map<String, String> d = parser.parseJSON(storage.seeAll());
+
+            System.out.println("Server save to json" + d);
+            snapShot.saveToJSON(d);
 
         }
     }
 
-    private void saveSnapshot() {
-        try (FileWriter writer = new FileWriter("snapshots/snapshot-" + snapshotCount.get() + ".txt")) {
-            writer.write(storage.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
 
     public static void main(String[] args) throws IOException {
         InMemoryStorage storage = new InMemoryStorage();
