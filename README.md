@@ -18,9 +18,7 @@ chmod +x tangerinekv-cli.sh
 > The .java files are already compiled, but to prevent any issues with the classpath, you should compile them first.
 
 ```bash
-$ javac ./src/kv/InMemoryStorage.java
-  javac ./src/kv/KVServer.java
-  javac ./src/kv/KVClient.java
+$ javac src/kv/*.java
 
 ```
 
