@@ -3,6 +3,8 @@
 - Implement KV Client Handing
 - Add KV Snapshots to disks.
 - Pub Sub
+- Transactions
+- Persistence
 - Binary Executables, Dockerise 
 - Node SDK
 - Cloud Support
