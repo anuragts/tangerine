@@ -3,9 +3,10 @@
 
 ## Running
 
+
+### Key-Value Store
 Making sh executable
 ```bash
-chmod +x tangerinekv-compile.sh 
 chmod +x tangerinekv-server.sh
 chmod +x tangerinekv-cli.sh
 ```
@@ -14,7 +15,10 @@ chmod +x tangerinekv-cli.sh
 > The .java files are already compiled, but to prevent any issues with the classpath, you should compile them first.
 
 ```bash
-$ ./tangerinekv-compile.sh
+$ javac ./src/kv/InMemoryStorage.java
+  javac ./src/kv/KVServer.java
+  javac ./src/kv/KVClient.java
+
 ```
 
 ```bash
