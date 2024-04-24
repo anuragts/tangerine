@@ -9,9 +9,9 @@ public class KVTest {
 
     private static void test() {
         InMemoryStorage storage = new InMemoryStorage();
-        storage.put("key1", "value1");
-        storage.put("key2", "value2");
-        storage.put("key3", "value3");
+        storage.set("key1", "value1");
+        storage.set("key1", "value1");
+        storage.set("key1", "value1");
         System.out.println(storage.seeAll());
         System.out.println(storage.get("key1"));
         System.out.println(storage.get("key2"));

@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class InMemoryStorage {
     private ConcurrentHashMap<String, String> storage = new ConcurrentHashMap<>();
 
-    public void put(String key, String value) {
+    public void set(String key, String value) {
         storage.put(key, value);
     }
 

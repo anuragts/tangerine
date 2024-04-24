@@ -28,8 +28,8 @@ public class KVServer {
             String input;
             while ((input = reader.readLine()) != null) {
                 String[] parts = input.split(" ");
-                if (parts[0].equals("put")) {
-                    storage.put(parts[1], parts[2]);
+                if (parts[0].equals("set")) {
+                    storage.set(parts[1], parts[2]);
                     writer.println("OK");
                 } else if (parts[0].equals("get")) {
                     String value = storage.get(parts[1]);

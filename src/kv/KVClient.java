@@ -1,53 +1,45 @@
 package kv;
 
-import java.util.Scanner;
+import java.io.*;
+import java.net.*;
 
 public class KVClient {
-    private InMemoryStorage storage;
+    private Socket socket;
+    private PrintWriter writer;
+    private BufferedReader reader;
 
-    public KVClient(InMemoryStorage storage) {
-        this.storage = storage;
+    public KVClient(String host, int port) throws IOException {
+        this.socket = new Socket(host, port);
+        this.writer = new PrintWriter(socket.getOutputStream(), true);
+        this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
 
-    public void run() {
-        Scanner scanner = new Scanner(System.in);
+    public void sendCommand(String command) throws IOException {
+        writer.println(command);
+        String response = reader.readLine();
+        System.out.println("Server response: " + response);
+    }
+
+    public void close() throws IOException {
+        socket.close();
+    }
+
+    public static void main(String[] args) throws IOException {
+        String host = "localhost";
+        int port = 1111;
+
+        KVClient client = new KVClient(host, port);
+
+        BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
+        String input;
         while (true) {
-            System.out.print("tangerine kv> ");
-            String input = scanner.nextLine();
-            String[] parts = input.split(" ");
-            if (parts[0].equals("put")) {
-                storage.put(parts[1], parts[2]);
-                System.out.println("OK");
-            } else if (parts[0].equals("get")) {
-                String value = storage.get(parts[1]);
-                if (value != null) {
-                    System.out.println(value);
-                } else {
-                    System.out.println("NOT_FOUND");
-                }
-            } else if (parts[0].equals("remove")) {
-                storage.remove(parts[1]);
-                System.out.println("OK");
-            } else if (parts[0].equals("contains")) {
-                boolean contains = storage.containsKey(parts[1]);
-                System.out.println(contains ? "TRUE" : "FALSE");
-            } else if (parts[0].equals("clear")) {
-                storage.clear();
-                System.out.println("OK");
-            } else if (parts[0].equals("seeAll")) {
-                System.out.println(storage.seeAll());
-            } else if (parts[0].equals("exit")) {
+            System.out.print("tangerine-cli> ");
+            input = consoleReader.readLine();
+            if (input.equalsIgnoreCase("quit")) {
+                client.close();
                 break;
-            } else {
-                System.out.println("Unknown command");
             }
+            client.sendCommand(input);
         }
-        scanner.close();
-    }
-
-    public static void main(String[] args) {
-        InMemoryStorage storage = new InMemoryStorage();
-        KVClient client = new KVClient(storage);
-        client.run();
     }
 }
