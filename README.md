@@ -1,10 +1,9 @@
 # 🍊 tangerine.
 ## in-memory vector database
 
-## Running
+## Key-Value Store
+### Running
 
-
-### Key-Value Store
 Making sh executable
 ```bash
 chmod +x tangerinekv-server.sh
@@ -29,32 +28,32 @@ $ ./tangerinekv-server.sh
 $ ./tangerinekv-cli.sh
 ```
 
-## Commands
-### set
+### Commands
+#### set
 
 ```bash
 $ set key value
 ```
 
-### get
+#### get
 
 ```bash
 $  get key
 ```
 
-### remove
+#### remove
 
 ```bash
 $  remove key
 ```
 
-### see all
+#### see all
 
 ```bash
 $  see all
 ```
 
-### quit
+#### quit
 
 ```bash
 $ quit
