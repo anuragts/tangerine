@@ -12,13 +12,14 @@ public class KVServer {
 
     public KVServer(InMemoryStorage storage, int port) throws IOException {
         this.storage = storage;
-        this.serverSocket = new ServerSocket(port);
+        this.serverSocket = new ServerSocket(port); // create a new server socket
         this.executor = Executors.newFixedThreadPool(10); // fixed no of threads
         System.out.println("KV Server started on port " + port);
     }
 
     public void run() throws IOException {
         while (true) {
+            // accept a connection from the client and handle the request in a separate thread using handleRequest method.
             Socket socket = serverSocket.accept();
             executor.submit(() -> {
                 try {
@@ -32,6 +33,7 @@ public class KVServer {
     }
 
     private void handleRequest(Socket socket) throws IOException {
+        // get input stream and output stream from the socket and create a buffered reader and a writer.
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 PrintWriter writer = new PrintWriter(socket.getOutputStream(), true)) {
             String input;

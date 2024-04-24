@@ -3,6 +3,7 @@ package kv;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class InMemoryStorage {
+    // using ConcurrentHashMap to store the data in memory.
     private ConcurrentHashMap<String, String> storage = new ConcurrentHashMap<>();
 
     public void set(String key, String value) {
@@ -27,8 +28,5 @@ public class InMemoryStorage {
 
     public String seeAll() {
         return storage.toString();
-    }
-
-    public static void main(String[] args) {
     }
 }

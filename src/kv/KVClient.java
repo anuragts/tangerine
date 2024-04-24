@@ -9,6 +9,7 @@ public class KVClient {
     private BufferedReader reader;
 
     public KVClient(String host, int port) throws IOException {
+        // create a socket object and connect to the server.
         this.socket = new Socket(host, port);
         this.writer = new PrintWriter(socket.getOutputStream(), true);
         this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
