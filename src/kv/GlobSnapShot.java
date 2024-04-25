@@ -3,6 +3,7 @@ package kv;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,20 +48,28 @@ public class GlobSnapShot {
 
     public Map<String, String> readSnapshot() {
         Map<String, String> data = new HashMap<>();
-
-        try (Stream<String> lines = Files.lines(Paths.get(directory + filename))) {
-            lines.forEach(line -> {
-                String[] parts = line.split("=", 2);
-                if (parts.length >= 2) {
-                    String key = parts[0];
-                    String value = parts[1];
-                    data.put(key, value);
-                }
-            });
+        Path path = Paths.get(directory + filename);
+    
+        try {
+            // Create file if it doesn't exist
+            if (!Files.exists(path)) {
+                Files.createFile(path);
+            }
+    
+            try (Stream<String> lines = Files.lines(path)) {
+                lines.forEach(line -> {
+                    String[] parts = line.split("=", 2);
+                    if (parts.length >= 2) {
+                        String key = parts[0];
+                        String value = parts[1];
+                        data.put(key, value);
+                    }
+                });
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+    
         return data;
     }
 
@@ -73,7 +82,7 @@ public class GlobSnapShot {
         // data.put("openai", "gpt3");
         data.put("anthropic", "claude");
 
-        // Use the saveToGlob method
+        // Use the saveToGlob method 
         globSnapShot.saveToGlob(data);
 
         // Use the readSnapshot method

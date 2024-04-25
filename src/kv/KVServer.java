@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import utils.*;
-import kv.InMemoryStorage;
 
 public class KVServer {
     private InMemoryStorage storage;
@@ -21,7 +20,13 @@ public class KVServer {
         System.out.println("KV Server started on port " + port);
         snapshotFile = new File("snapshots");
         snapshotFile.mkdirs();
-
+    
+        // Initialize GlobSnapShot and load the existing data
+        GlobSnapShot globSnapShot = new GlobSnapShot();
+        Map<String, String> existingData = globSnapShot.readSnapshot();
+        for (Map.Entry<String, String> entry : existingData.entrySet()) {
+            storage.set(entry.getKey(), entry.getValue());
+        }
     }
 
     public void run() throws IOException {
@@ -42,7 +47,7 @@ public class KVServer {
                     try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
                         String line;
                         while ((line = reader.readLine()) != null) {
-                            String[] parts = line.split(": ");
+                            String[] parts = line.split("= ");
                             storage.set(parts[0], parts[1]);
                         }
                     } catch (IOException e) {
@@ -57,7 +62,8 @@ public class KVServer {
     private void handleRequest(Socket socket) throws IOException {
         // get input stream and output stream from the socket and create a buffered
         // reader and a writer.
-        SnapShot snapShot = new SnapShot();
+        // SnapShot snapShot = new SnapShot();
+        GlobSnapShot globSnapShot = new GlobSnapShot();
         JSONParser parser = new JSONParser();
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -67,6 +73,7 @@ public class KVServer {
                 String[] parts = input.split(" ");
                 if (parts[0].equals("set")) {
                     storage.set(parts[1], parts[2]);
+                    globSnapShot.saveToGlob(parser.parseJSON(storage.seeAll()));
                     writer.println("OK");
                 } else if (parts[0].equals("get")) {
                     String value = storage.get(parts[1]);
@@ -77,6 +84,7 @@ public class KVServer {
                     }
                 } else if (parts[0].equals("remove")) {
                     storage.remove(parts[1]);
+                    globSnapShot.saveToGlob(parser.parseJSON(storage.seeAll()));
                     writer.println("OK");
                 } else if (parts[0].equals("contains")) {
                     boolean contains = storage.containsKey(parts[1]);
@@ -91,10 +99,7 @@ public class KVServer {
                 }
             }
             // save snapshot every time a command is executed
-            Map<String, String> d = parser.parseJSON(storage.seeAll());
-
-            System.out.println("Server save to json" + d);
-            snapShot.saveToJSON(d);
+            // snapShot.saveToJSON(d);
 
         }
     }
