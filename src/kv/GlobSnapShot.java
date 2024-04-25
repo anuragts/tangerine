@@ -27,6 +27,7 @@ public class GlobSnapShot {
             try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(directory + filename), StandardOpenOption.APPEND)) {
                 for (Map.Entry<String, String> entry : data.entrySet()) {
                     // Only append entries that don't already exist in the file
+                    //  This only checks the key, not the value
                     if (!existingData.containsKey(entry.getKey())) {
                         writer.write(entry.getKey() + "=" + entry.getValue());
                         writer.newLine();
