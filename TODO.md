@@ -4,6 +4,7 @@
 - [X] Concurrent KV Client Handling
 - [X]Add KV Snapshots to disks.
 - use glob file to store the snapshots.
+- Update SET Command to take expire time as a argument.
 - Expire Keys
 - TTL on Keys
 - HELP Command
