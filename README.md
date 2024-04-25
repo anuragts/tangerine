@@ -12,20 +12,24 @@ Making sh executable
 ```bash
 chmod +x tangerinekv-server.sh
 chmod +x tangerinekv-cli.sh
+chmod +x tangerinekv-compile.sh
 ```
 
 > [!NOTE]
 > The .java files are already compiled, but to prevent any issues with the classpath, you should compile them first.
 
 ```bash
-$ javac src/kv/*.java
+./tangerinekv-compile.sh
 
 ```
+
+Running the Tangerine-KV Server
 
 ```bash
 $ ./tangerinekv-server.sh
 ```
 
+Running the Tangerine-KV Client
 ```bash
 $ ./tangerinekv-cli.sh
 ```
