@@ -12,7 +12,6 @@ import java.nio.file.StandardOpenOption;
 
 public class GlobSnapShot {
 
-    // Specify your directory and filename here
     private final String directory = "snapshots/";
     private final String filename = "snapshot.glob";
 
