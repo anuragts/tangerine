@@ -3,6 +3,7 @@
 - [X] Implement KV Client Handing
 - [X] Concurrent KV Client Handling
 - [X]Add KV Snapshots to disks.
+- use glob file to store the snapshots.
 - Expire Keys
 - TTL on Keys
 - HELP Command
