@@ -4,6 +4,10 @@
 - [X] Concurrent KV Client Handling
 - [X]Add KV Snapshots to disks.
 - Expire Keys
+- TTL on Keys
+- HELP Command
+- DBSIZE Command
+- Multiple DB Support
 - Queue support
 - Pub Sub
 - Transactions
