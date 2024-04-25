@@ -26,13 +26,19 @@ chmod +x tangerinekv-compile.sh
 Running the Tangerine-KV Server
 
 ```bash
-$ ./tangerinekv-server.sh
+ ./tangerinekv-server.sh
 ```
 
 Running the Tangerine-KV Client
 ```bash
-$ ./tangerinekv-cli.sh
+ ./tangerinekv-cli.sh
 ```
+
+Testing 
+```bash
+$ set key value
+```
+if server responds with `OK`, then the client & server is working.
 
 ### Commands
 #### set
