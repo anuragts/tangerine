@@ -24,12 +24,16 @@ public class GlobSnapShot {
             Map<String, String> existingData = readSnapshot();
 
             // Append new data to file
-            try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(directory + filename), StandardOpenOption.APPEND)) {
+            try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(directory + filename),
+                    StandardOpenOption.APPEND)) {
                 for (Map.Entry<String, String> entry : data.entrySet()) {
+                    String key = entry.getKey();
+                    String value = entry.getValue();
+
                     // Only append entries that don't already exist in the file
-                    //  This only checks the key, not the value
-                    if (!existingData.containsKey(entry.getKey())) {
-                        writer.write(entry.getKey() + "=" + entry.getValue());
+                    // or have a different value
+                    if (!existingData.containsKey(key) || !existingData.get(key).equals(value)) {
+                        writer.write(key + "=" + value);
                         writer.newLine();
                     }
                 }
@@ -66,8 +70,8 @@ public class GlobSnapShot {
 
         // Create a map with your data
         Map<String, String> data = new HashMap<>();
-        // data.put("openai", "gpt4");
-        data.put("claude", "gpt3");
+        // data.put("openai", "gpt3");
+        data.put("anthropic", "claude");
 
         // Use the saveToGlob method
         globSnapShot.saveToGlob(data);
