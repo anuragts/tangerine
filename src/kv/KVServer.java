@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import utils.*;
-import kv.InMemoryStorage;
 
 public class KVServer {
     private InMemoryStorage storage;
@@ -16,12 +15,19 @@ public class KVServer {
 
     public KVServer(InMemoryStorage storage, int port) throws IOException {
         this.storage = storage;
-        this.serverSocket = new ServerSocket(port); // create a new server socket
-        this.executor = Executors.newFixedThreadPool(10); // fixed no of threads
+        this.serverSocket = new ServerSocket(port);
+        this.executor = Executors.newFixedThreadPool(10); // fixed no of threads (can be increased or decreased
+                                                          // according to need)
         System.out.println("KV Server started on port " + port);
         snapshotFile = new File("snapshots");
         snapshotFile.mkdirs();
 
+        // Initialize GlobSnapShot and load the existing data
+        GlobSnapShot globSnapShot = new GlobSnapShot();
+        Map<String, String> existingData = globSnapShot.readSnapshot();
+        for (Map.Entry<String, String> entry : existingData.entrySet()) {
+            storage.set(entry.getKey(), entry.getValue());
+        }
     }
 
     public void run() throws IOException {
@@ -36,14 +42,21 @@ public class KVServer {
                     e.printStackTrace();
                 }
             });
+            // check snapshot files and read the files and set or sync the current in memory
+            // storage to the snapshot data
             File[] snapshotFiles = snapshotFile.listFiles();
             if (snapshotFiles != null) {
                 for (File file : snapshotFiles) {
                     try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
                         String line;
                         while ((line = reader.readLine()) != null) {
-                            String[] parts = line.split(": ");
-                            storage.set(parts[0], parts[1]);
+                            // snapshot is '=' kv pair because that is how hashmap in java stores data
+                            String[] parts = line.split("=");
+                            if (parts.length >= 2) {
+                                storage.set(parts[0], parts[1]);
+                            } else {
+                                System.out.println("Invalid line in snapshot file: " + line);
+                            }
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -55,11 +68,14 @@ public class KVServer {
     }
 
     private void handleRequest(Socket socket) throws IOException {
-        // get input stream and output stream from the socket and create a buffered
-        // reader and a writer.
-        SnapShot snapShot = new SnapShot();
-        JSONParser parser = new JSONParser();
+        // create a new GlobSnapShot object to save the snapshot.
+        GlobSnapShot globSnapShot = new GlobSnapShot();
+        // create a new JSONParser object to parse string to object. This is essential
+        // because
+        // getAll returns a string of object.
 
+        // get input stream and output stream from the socket and create a buffered
+        // reader and a writer
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 PrintWriter writer = new PrintWriter(socket.getOutputStream(), true)) {
             String input;
@@ -67,6 +83,7 @@ public class KVServer {
                 String[] parts = input.split(" ");
                 if (parts[0].equals("set")) {
                     storage.set(parts[1], parts[2]);
+                    globSnapShot.saveToGlob(JSONParser.parseJSON(storage.seeAll()));
                     writer.println("OK");
                 } else if (parts[0].equals("get")) {
                     String value = storage.get(parts[1]);
@@ -77,6 +94,7 @@ public class KVServer {
                     }
                 } else if (parts[0].equals("remove")) {
                     storage.remove(parts[1]);
+                    globSnapShot.saveToGlob(JSONParser.parseJSON(storage.seeAll()));
                     writer.println("OK");
                 } else if (parts[0].equals("contains")) {
                     boolean contains = storage.containsKey(parts[1]);
@@ -90,16 +108,8 @@ public class KVServer {
                     writer.println("Unknown command");
                 }
             }
-            // save snapshot every time a command is executed
-            Map<String, String> d = parser.parseJSON(storage.seeAll());
-
-            System.out.println("Server save to json" + d);
-            snapShot.saveToJSON(d);
-
         }
     }
-
-
 
     public static void main(String[] args) throws IOException {
         InMemoryStorage storage = new InMemoryStorage();
