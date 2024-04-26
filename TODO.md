@@ -5,9 +5,9 @@
 - [X] Add KV Snapshots to disks.
 - [X] use glob file to store the snapshots.   (replace json with glob)
 - Update SET Command to take expire time as a argument.
-- Up arrow key in client terminal will load last command.
 - Expire Keys
 - TTL on Keys
+- Up arrow key in client terminal will load last command.
 - HELP Command
 - DBSIZE Command
 - Multiple DB Support
