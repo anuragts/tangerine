@@ -81,31 +81,39 @@ public class KVServer {
             String input;
             while ((input = reader.readLine()) != null) {
                 String[] parts = input.split(" ");
-                if (parts[0].equals("set")) {
-                    storage.set(parts[1], parts[2]);
-                    globSnapShot.saveToGlob(JSONParser.parseJSON(storage.seeAll()));
-                    writer.println("OK");
-                } else if (parts[0].equals("get")) {
-                    String value = storage.get(parts[1]);
-                    if (value != null) {
-                        writer.println(value);
-                    } else {
-                        writer.println("NOT_FOUND");
-                    }
-                } else if (parts[0].equals("remove")) {
-                    storage.remove(parts[1]);
-                    globSnapShot.saveToGlob(JSONParser.parseJSON(storage.seeAll()));
-                    writer.println("OK");
-                } else if (parts[0].equals("contains")) {
-                    boolean contains = storage.containsKey(parts[1]);
-                    writer.println(contains ? "TRUE" : "FALSE");
-                } else if (parts[0].equals("clear")) {
-                    storage.clear();
-                    writer.println("OK");
-                } else if (parts[0].equals("seeAll")) {
-                    writer.println(storage.seeAll());
-                } else {
-                    writer.println("Unknown command");
+                switch (parts[0]) {
+                    case "set":
+                        storage.set(parts[1], parts[2]);
+                        globSnapShot.saveToGlob(JSONParser.parseJSON(storage.seeAll()));
+                        writer.println("OK");
+                        break;
+                    case "get":
+                        String value = storage.get(parts[1]);
+                        if (value != null) {
+                            writer.println(value);
+                        } else {
+                            writer.println("NOT_FOUND");
+                        }
+                        break;
+                    case "remove":
+                        storage.remove(parts[1]);
+                        globSnapShot.saveToGlob(JSONParser.parseJSON(storage.seeAll()));
+                        writer.println("OK");
+                        break;
+                    case "contains":
+                        boolean contains = storage.containsKey(parts[1]);
+                        writer.println(contains ? "TRUE" : "FALSE");
+                        break;
+                    case "clear":
+                        storage.clear();
+                        writer.println("OK");
+                        break;
+                    case "seeAll":
+                        writer.println(storage.seeAll());
+                        break;
+                    default:
+                        writer.println("Unknown command");
+                        break;
                 }
             }
         }
