@@ -2,9 +2,10 @@
 - [X] Create a KV server to handle the requests.
 - [X] Implement KV Client Handing
 - [X] Concurrent KV Client Handling
-- [X]Add KV Snapshots to disks.
-- use glob file to store the snapshots.   (replace json with glob)
+- [X] Add KV Snapshots to disks.
+- [X] use glob file to store the snapshots.   (replace json with glob)
 - Update SET Command to take expire time as a argument.
+- Up arrow key in client terminal will load last command.
 - Expire Keys
 - TTL on Keys
 - HELP Command
