@@ -2,6 +2,7 @@ package kv;
 
 import java.io.*;
 import java.net.*;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -16,6 +17,9 @@ public class KVServer {
     private ExecutorService executor;
     private File snapshotFile;
     private ScheduledExecutorService snapshotExecutor = Executors.newSingleThreadScheduledExecutor();
+    private PubSub pubSub = new PubSub();
+    private Map<String, PrintWriter> clientWriters = new HashMap<>();
+
 
     public KVServer(InMemoryStorage storage, int port) throws IOException {
         this.storage = storage;
@@ -93,6 +97,8 @@ public class KVServer {
     private void handleRequest(Socket socket) throws IOException {
         // create a new GlobSnapShot object to save the snapshot.
         GlobSnapShot globSnapShot = new GlobSnapShot();
+        // create a new PubSub object to handle pub sub
+
         // create a new JSONParser object to parse string to object. This is essential
         // because
         // getAll returns a string of object.
@@ -110,8 +116,8 @@ public class KVServer {
                         writer.println();
                         break;
                     case "SET":
-                    // method overloading if ttl (time to live) is provided 
-                    //  ttl is in seconds.
+                        // method overloading if ttl (time to live) is provided
+                        // ttl is in seconds.
                         if (parts.length == 4) {
                             int ttl = Integer.parseInt(parts[3]);
                             storage.set(parts[1], parts[2], ttl);
@@ -164,6 +170,40 @@ public class KVServer {
                         break;
                     case "HELP":
                         writer.println(storage.HELP());
+                        writer.println();
+                        break;
+
+                    // pub sub implementation
+                    case "SUBSCRIBE":
+                        PrintWriter writers = new PrintWriter(socket.getOutputStream(), true);
+                        clientWriters.put(parts[1], writers);
+                        pubSub.subscribe(parts[1], new PubSub.Subscriber() {
+                            @Override
+                            public void receive(String topic, String message) {
+                                PrintWriter clientWriter = clientWriters.get(topic);
+                                if (clientWriter != null) {
+                                    clientWriter.println("New message on topic " + topic + ": " + message);
+                                    clientWriter.println();
+                                }
+                            }
+                        });
+                        writer.println("OK");
+                        writer.println();
+                        break;
+                    case "PUBLISH":
+                        pubSub.publish(parts[1], parts[2]);
+                        writer.println("OK");
+                        writer.println();
+                        break;
+                    case "UNSUBSCRIBE":
+                        clientWriters.remove(parts[1]);
+                        pubSub.unsubscribe(parts[1], new PubSub.Subscriber() {
+                            @Override
+                            public void receive(String topic, String message) {
+                                // handle message reception here
+                            }
+                        });
+                        writer.println("OK");
                         writer.println();
                         break;
                     default:
