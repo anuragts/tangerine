@@ -64,7 +64,6 @@ public class KVServer {
                 }
             }
         }
-
     }
 
     private void handleRequest(Socket socket) throws IOException {
@@ -83,7 +82,14 @@ public class KVServer {
                 String[] parts = input.split(" ");
                 switch (parts[0]) {
                     case "set":
-                        storage.set(parts[1], parts[2]);
+                        if (parts.length == 4) {
+                            int ttl = Integer.parseInt(parts[3]);
+                            storage.set(parts[1], parts[2], ttl);
+                            System.out.println("TTL set to " + ttl);
+                        } else {
+                            storage.set(parts[1], parts[2]);
+                        }
+
                         globSnapShot.saveToGlob(JSONParser.parseJSON(storage.seeAll()));
                         writer.println("OK");
                         break;
