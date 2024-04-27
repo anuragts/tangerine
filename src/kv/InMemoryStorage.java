@@ -9,7 +9,7 @@ public class InMemoryStorage {
     // using ConcurrentHashMap to store the data in memory.
     private ConcurrentHashMap<String, String> storage = new ConcurrentHashMap<>();
     // An hashmap to store the expiration times of the keys.
-    private ConcurrentHashMap<String, Long> expirationTimes = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, Long> expirationTimes = new ConcurrentHashMap<>(); // this TTL is not saved as snapshot
 
     // Allocation one thread for the executor service.
     private ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
@@ -65,6 +65,7 @@ public class InMemoryStorage {
 
     public String TTL(String key) {
         if (expirationTimes.containsKey(key)) {
+            // get expiration time of the key - current time
             long remainingTime = expirationTimes.get(key) - System.currentTimeMillis();
             return remainingTime > 0 ? remainingTime / 1000 + " seconds" : "Expired";
         } else {
