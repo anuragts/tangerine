@@ -13,7 +13,6 @@
 - Take port no and debug mode as arguments.
 - [X] Support Capitalize commands. (made commands capitalized)
 - [X] HELP Command
-- Add a command to list all the keys in a DB.
 - DBSIZE Command
 - Multiple DB Support
 - Queue support

@@ -105,6 +105,10 @@ public class KVServer {
             while ((input = reader.readLine()) != null) {
                 String[] parts = input.split(" ");
                 switch (parts[0]) {
+                    case "PING":
+                        writer.println(storage.PING());
+                        writer.println();
+                        break;
                     case "SET":
                     // method overloading if ttl (time to live) is provided 
                     //  ttl is in seconds.

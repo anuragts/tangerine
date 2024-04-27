@@ -35,6 +35,10 @@ public class InMemoryStorage {
         return storage.get(key);
     }
 
+    public String PING(){
+        return "PONG";
+    }
+
     public void remove(String key) {
         storage.remove(key);
     }
