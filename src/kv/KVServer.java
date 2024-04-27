@@ -105,7 +105,7 @@ public class KVServer {
             while ((input = reader.readLine()) != null) {
                 String[] parts = input.split(" ");
                 switch (parts[0]) {
-                    case "set":
+                    case "SET":
                     // method overloading if ttl (time to live) is provided 
                     //  ttl is in seconds.
                         if (parts.length == 4) {
@@ -117,7 +117,7 @@ public class KVServer {
                         }
                         writer.println("OK");
                         break;
-                    case "get":
+                    case "GET":
                         String value = storage.get(parts[1]);
                         if (value != null) {
                             writer.println(value);
@@ -125,27 +125,26 @@ public class KVServer {
                             writer.println("NOT_FOUND");
                         }
                         break;
-                    case "remove":
+                    case "REMOVE":
                         storage.remove(parts[1]);
                         globSnapShot.saveToGlob(JSONParser.parseJSON(storage.seeAll()));
                         writer.println("OK");
                         break;
-                    case "contains":
+                    case "CONTAINS":
                         boolean contains = storage.containsKey(parts[1]);
                         writer.println(contains ? "TRUE" : "FALSE");
                         break;
-                    case "clear":
+                    case "CLEAR":
                         storage.clear();
                         writer.println("OK");
                         break;
-                    case "seeAll":
+                    case "ALL":
                         writer.println(storage.seeAll());
                         break;
-                    case "expire":
+                    case "EXPIRE":
                         String expire = storage.expire(parts[1], Integer.parseInt(parts[2]));
                         writer.println(expire);
                         break;
-
                     case "TTL":
                         String ttl = storage.TTL(parts[1]);
                         writer.println(ttl);
