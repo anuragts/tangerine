@@ -16,7 +16,7 @@ chmod +x tangerinekv-compile.sh
 ```
 
 > [!NOTE]
-> The .java files are already compiled, but to prevent any issues with the classpath, you should compile them first.
+> The .java files are already compiled when running the scripts, but to prevent any issues with the classpath, you should compile them first.
 
 ```bash
 ./tangerinekv-compile.sh
