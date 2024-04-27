@@ -8,6 +8,9 @@ import java.util.concurrent.TimeUnit;
 public class InMemoryStorage {
     // using ConcurrentHashMap to store the data in memory.
     private ConcurrentHashMap<String, String> storage = new ConcurrentHashMap<>();
+    // An hashmap to store the expiration times of the keys.
+    private ConcurrentHashMap<String, Long> expirationTimes = new ConcurrentHashMap<>(); // this TTL is not saved as snapshot
+
     // Allocation one thread for the executor service.
     private ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
@@ -18,10 +21,13 @@ public class InMemoryStorage {
     // Method overloading for ttl.
 
     public void set(String key, String value, int ttl) {
+        long expirationTime = System.currentTimeMillis() + ttl * 1000;
         storage.put(key, value);
+        expirationTimes.put(key, expirationTime);
 
         executorService.schedule(() -> {
             storage.remove(key);
+            expirationTimes.remove(key);
         }, ttl, TimeUnit.SECONDS);
     }
 
@@ -47,9 +53,23 @@ public class InMemoryStorage {
     
     public String expire(String key, int ttl) {
         // tts is int as seconds 
+        long expirationTime = System.currentTimeMillis() + ttl * 1000;
+
+        expirationTimes.put(key, expirationTime);
+
         executorService.schedule(() -> {
             storage.remove(key);
         }, ttl, TimeUnit.SECONDS);
         return "OK";
+    }
+
+    public String TTL(String key) {
+        if (expirationTimes.containsKey(key)) {
+            // get expiration time of the key - current time
+            long remainingTime = expirationTimes.get(key) - System.currentTimeMillis();
+            return remainingTime > 0 ? remainingTime / 1000 + " seconds" : "Expired";
+        } else {
+            return "No TTL set";
+        }
     }
 }

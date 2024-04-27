@@ -10,6 +10,7 @@
 - [X] Change the snapshot to work on after some period of time instead of on every request.
 - [X] Add graceful shutdown handling to server. Listen to OS signals.
 - Up arrow key in client terminal will load last command.
+- Take port no and debug mode as arguments.
 - Support Capitalize commands.
 - HELP Command
 - DBSIZE Command

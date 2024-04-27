@@ -145,6 +145,11 @@ public class KVServer {
                         String expire = storage.expire(parts[1], Integer.parseInt(parts[2]));
                         writer.println(expire);
                         break;
+
+                    case "TTL":
+                        String ttl = storage.TTL(parts[1]);
+                        writer.println(ttl);
+                        break;
                     default:
                         writer.println("Unknown command");
                         break;
