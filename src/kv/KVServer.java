@@ -5,6 +5,9 @@ import java.net.*;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import utils.*;
 
 public class KVServer {
@@ -12,22 +15,43 @@ public class KVServer {
     private ServerSocket serverSocket;
     private ExecutorService executor;
     private File snapshotFile;
+    private ScheduledExecutorService snapshotExecutor = Executors.newSingleThreadScheduledExecutor();
 
     public KVServer(InMemoryStorage storage, int port) throws IOException {
         this.storage = storage;
         this.serverSocket = new ServerSocket(port);
-        this.executor = Executors.newFixedThreadPool(3); // fixed no of threads (can be increased or decreased
-                                                          // according to need)
+        this.executor = Executors.newFixedThreadPool(3); // fixed no of threads (can be increased or decreased according
+                                                         // to need)
+
+        GlobSnapShot globSnapShot = new GlobSnapShot();
+
         System.out.println("KV Server started on port " + port);
         snapshotFile = new File("snapshots");
         snapshotFile.mkdirs();
 
+        // Schedule the snapshot task to run every 120 seconds
+        snapshotExecutor.scheduleAtFixedRate(() -> globSnapShot.saveToGlob(JSONParser.parseJSON(storage.seeAll())), 0,
+                120, TimeUnit.SECONDS);
         // Initialize GlobSnapShot and load the existing data
-        GlobSnapShot globSnapShot = new GlobSnapShot();
         Map<String, String> existingData = globSnapShot.readSnapshot();
         for (Map.Entry<String, String> entry : existingData.entrySet()) {
             storage.set(entry.getKey(), entry.getValue());
         }
+
+        // Add graceful shutdown to handle the server shutdown and take snapshot of the
+        // data.
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            System.out.println("Shutting down server...");
+            try {
+                globSnapShot.saveToGlob(JSONParser.parseJSON(storage.seeAll()));
+                serverSocket.close(); // Close the socket connection
+                executor.shutdownNow(); // Attempts to stop all actively executing tasks
+                snapshotExecutor.shutdownNow(); // Attempts to stop all actively executing tasks
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }));
+
     }
 
     public void run() throws IOException {
@@ -82,6 +106,8 @@ public class KVServer {
                 String[] parts = input.split(" ");
                 switch (parts[0]) {
                     case "set":
+                    // method overloading if ttl (time to live) is provided 
+                    //  ttl is in seconds.
                         if (parts.length == 4) {
                             int ttl = Integer.parseInt(parts[3]);
                             storage.set(parts[1], parts[2], ttl);
@@ -89,8 +115,6 @@ public class KVServer {
                         } else {
                             storage.set(parts[1], parts[2]);
                         }
-
-                        globSnapShot.saveToGlob(JSONParser.parseJSON(storage.seeAll()));
                         writer.println("OK");
                         break;
                     case "get":

@@ -39,7 +39,7 @@ public class GlobSnapShot {
                 }
             }
 
-            System.out.println("Successfully saved data to " + directory + filename);
+            // System.out.println("Successfully saved data to " + directory + filename);
         } catch (IOException e) {
             e.printStackTrace();
         }
