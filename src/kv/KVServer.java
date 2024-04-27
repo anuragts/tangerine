@@ -116,41 +116,55 @@ public class KVServer {
                             storage.set(parts[1], parts[2]);
                         }
                         writer.println("OK");
+                        writer.println();
                         break;
                     case "GET":
                         String value = storage.get(parts[1]);
                         if (value != null) {
                             writer.println(value);
+                            writer.println();
                         } else {
                             writer.println("NOT_FOUND");
+                            writer.println();
                         }
                         break;
                     case "REMOVE":
                         storage.remove(parts[1]);
                         globSnapShot.saveToGlob(JSONParser.parseJSON(storage.seeAll()));
                         writer.println("OK");
+                        writer.println();
                         break;
                     case "CONTAINS":
                         boolean contains = storage.containsKey(parts[1]);
                         writer.println(contains ? "TRUE" : "FALSE");
+                        writer.println();
                         break;
                     case "CLEAR":
                         storage.clear();
                         writer.println("OK");
+                        writer.println();
                         break;
                     case "ALL":
                         writer.println(storage.seeAll());
+                        writer.println();
                         break;
                     case "EXPIRE":
                         String expire = storage.expire(parts[1], Integer.parseInt(parts[2]));
                         writer.println(expire);
+                        writer.println();
                         break;
                     case "TTL":
                         String ttl = storage.TTL(parts[1]);
                         writer.println(ttl);
+                        writer.println();
+                        break;
+                    case "HELP":
+                        writer.println(storage.HELP());
+                        writer.println();
                         break;
                     default:
                         writer.println("Unknown command");
+                        writer.println();
                         break;
                 }
             }

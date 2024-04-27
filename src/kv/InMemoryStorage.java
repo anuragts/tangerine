@@ -72,4 +72,23 @@ public class InMemoryStorage {
             return "No TTL set";
         }
     }
-}
+
+    public String HELP() {
+        String resetColor = "\u001B[0m";
+        String commandColor = "\u001B[34m";
+        String descriptionColor = "\u001B[37m";
+    
+        StringBuilder helpMessage = new StringBuilder();
+    
+        helpMessage.append(commandColor + "SET key value [ttl]" + resetColor + descriptionColor + " : Store the value with the specified key. Optional ttl (time to live) in seconds can be provided, after which the key-value pair will be automatically removed.\n" + resetColor);
+        helpMessage.append(commandColor + "GET key" + resetColor + descriptionColor + " : Retrieve the value of the specified key.\n" + resetColor);
+        helpMessage.append(commandColor + "REMOVE key" + resetColor + descriptionColor + " : Remove the key-value pair with the specified key.\n" + resetColor);
+        helpMessage.append(commandColor + "CONTAINS key" + resetColor + descriptionColor + " : Check if the storage contains a value for the specified key.\n" + resetColor);
+        helpMessage.append(commandColor + "CLEAR" + resetColor + descriptionColor + " : Remove all key-value pairs from the storage.\n" + resetColor);
+        helpMessage.append(commandColor + "ALL" + resetColor + descriptionColor + " : See all key-value pairs in the storage.\n" + resetColor);
+        helpMessage.append(commandColor + "EXPIRE key ttl" + resetColor + descriptionColor + " : Set a ttl (time to live) in seconds for the specified key, after which the key-value pair will be automatically removed.\n" + resetColor);
+        helpMessage.append(commandColor + "TTL key" + resetColor + descriptionColor + " : Get the remaining time to live (in seconds) for the specified key.\n" + resetColor);
+    
+        return helpMessage.toString();
+    }
+}   

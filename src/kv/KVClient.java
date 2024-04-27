@@ -17,8 +17,10 @@ public class KVClient {
 
     public void sendCommand(String command) throws IOException {
         writer.println(command);
-        String response = reader.readLine();
-        System.out.println("Server response: " + response);
+        String response;
+        while ((response = reader.readLine()) != null && !response.isEmpty()) {
+            System.out.println(response);
+        }
     }
 
     public void close() throws IOException {
