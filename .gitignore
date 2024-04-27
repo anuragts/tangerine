@@ -1,1 +1,26 @@
 snapshots/
+
+# Java
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Directory for compiled binary classes
+/bin/
+/build/
+
+# IntelliJ
+*.iml
+*.iws
+.idea/
+
+# Eclipse
+*.project
+.classpath
+.settings/
+
+# Mac OS X
+.DS_Store
