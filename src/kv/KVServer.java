@@ -16,7 +16,7 @@ public class KVServer {
     public KVServer(InMemoryStorage storage, int port) throws IOException {
         this.storage = storage;
         this.serverSocket = new ServerSocket(port);
-        this.executor = Executors.newFixedThreadPool(10); // fixed no of threads (can be increased or decreased
+        this.executor = Executors.newFixedThreadPool(3); // fixed no of threads (can be increased or decreased
                                                           // according to need)
         System.out.println("KV Server started on port " + port);
         snapshotFile = new File("snapshots");
@@ -116,6 +116,10 @@ public class KVServer {
                         break;
                     case "seeAll":
                         writer.println(storage.seeAll());
+                        break;
+                    case "expire":
+                        String expire = storage.expire(parts[1], Integer.parseInt(parts[2]));
+                        writer.println(expire);
                         break;
                     default:
                         writer.println("Unknown command");
