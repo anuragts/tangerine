@@ -20,8 +20,9 @@ public class KVServer {
     public KVServer(InMemoryStorage storage, int port) throws IOException {
         this.storage = storage;
         this.serverSocket = new ServerSocket(port);
-        this.executor = Executors.newFixedThreadPool(3); // fixed no of threads (can be increased or decreased
-                                                         // according to need)
+        this.executor = Executors.newFixedThreadPool(3); // fixed no of threads (can be increased or decreased according
+                                                         // to need)
+
         GlobSnapShot globSnapShot = new GlobSnapShot();
 
         System.out.println("KV Server started on port " + port);
@@ -37,11 +38,12 @@ public class KVServer {
             storage.set(entry.getKey(), entry.getValue());
         }
 
-        // Add graceful shutdown to handle the server shutdown and take snapshot of the data.
+        // Add graceful shutdown to handle the server shutdown and take snapshot of the
+        // data.
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("Shutting down server...");
             try {
-                globSnapShot.saveToGlob(JSONParser.parseJSON(storage.seeAll())); 
+                globSnapShot.saveToGlob(JSONParser.parseJSON(storage.seeAll()));
                 serverSocket.close(); // Close the socket connection
                 executor.shutdownNow(); // Attempts to stop all actively executing tasks
                 snapshotExecutor.shutdownNow(); // Attempts to stop all actively executing tasks
@@ -104,6 +106,8 @@ public class KVServer {
                 String[] parts = input.split(" ");
                 switch (parts[0]) {
                     case "set":
+                    // method overloading if ttl (time to live) is provided 
+                    //  ttl is in seconds.
                         if (parts.length == 4) {
                             int ttl = Integer.parseInt(parts[3]);
                             storage.set(parts[1], parts[2], ttl);
@@ -111,8 +115,6 @@ public class KVServer {
                         } else {
                             storage.set(parts[1], parts[2]);
                         }
-
-                        // globSnapShot.saveToGlob(JSONParser.parseJSON(storage.seeAll()));
                         writer.println("OK");
                         break;
                     case "get":
