@@ -71,6 +71,8 @@ $  see all
 $ quit
 ```
 
+for progress and status check TODO.md
+
 ## License
 
 MIT
