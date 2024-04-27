@@ -7,9 +7,10 @@
 - [X] Update SET Command to take expire time as a argument.
 - [X] Expire Keys
 - [X] TTL on Keys
-- Change the snapshot to work on after some period of time instead of on every request.
-- Add graceful shutdown handling to server. Listen to OS signals.
+- [X] Change the snapshot to work on after some period of time instead of on every request.
+- [X] Add graceful shutdown handling to server. Listen to OS signals.
 - Up arrow key in client terminal will load last command.
+- Support Capitalize commands.
 - HELP Command
 - DBSIZE Command
 - Multiple DB Support
