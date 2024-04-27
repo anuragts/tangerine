@@ -11,8 +11,9 @@
 - [X] Add graceful shutdown handling to server. Listen to OS signals.
 - Up arrow key in client terminal will load last command.
 - Take port no and debug mode as arguments.
-- Support Capitalize commands.
-- HELP Command
+- [X] Support Capitalize commands. (made commands capitalized)
+- [X] HELP Command
+- Add a command to list all the keys in a DB.
 - DBSIZE Command
 - Multiple DB Support
 - Queue support
