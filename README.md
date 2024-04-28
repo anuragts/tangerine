@@ -36,15 +36,21 @@ Running the Tangerine-KV Client
 
 Testing 
 ```bash
-$ set key value
+$ SET key value
 ```
 if server responds with `OK`, then the client & server is working.
 
 ### Commands
-#### set
+
+#### PING
+```bash
+$ PING
+```
+
+#### SET
 
 ```bash
-$ set key value
+$ SET key value
 ```
 
 #### get
@@ -53,23 +59,48 @@ $ set key value
 $  get key
 ```
 
-#### remove
+#### REMOVE
 
 ```bash
-$  remove key
+$  REMOVE key
 ```
 
-#### see all
+#### ALL
 
 ```bash
-$  see all
+$  ALL
 ```
 
-#### quit
+#### CONTAINS
+```bash
+$  CONTAINS key
+```
+
+#### CLEAR
 
 ```bash
-$ quit
+$  CLEAR
 ```
+
+#### EXPIRE
+
+```bash
+$  EXPIRE key seconds
+```
+
+#### TTL
+
+```bash
+$  TTL key
+```
+
+#### HELP
+
+```bash
+$  HELP
+```
+
+
 
 for progress and status check TODO.md
 
