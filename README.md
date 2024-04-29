@@ -53,10 +53,10 @@ $ PING
 $ SET key value
 ```
 
-#### get
+#### GET
 
 ```bash
-$  get key
+$  GET key
 ```
 
 #### REMOVE
@@ -100,6 +100,20 @@ $  TTL key
 $  HELP
 ```
 
+#### SUBSCRIBE
+```bash
+$  SUBSCRIBE topic
+```
+
+#### PUBLISH
+```bash
+$  PUBLISH topic message
+```
+
+<!-- #### UNSUBSCRIBE
+```bash
+$  UNSUBSCRIBE topic
+``` -->
 
 
 for progress and status check TODO.md

@@ -16,7 +16,7 @@
 - DBSIZE Command
 - Multiple DB Support
 - Queue support
-- Pub Sub
+- [X] Pub Sub   (unsubscribe does not work)
 - Transactions
 - Persistence
 - Tangerine config file
