@@ -16,6 +16,7 @@ public class KVServer {
     private ExecutorService executor;
     private File snapshotFile;
     private ScheduledExecutorService snapshotExecutor = Executors.newSingleThreadScheduledExecutor();
+    private PubSub pubSub = new PubSub(); // Instance of our PubSub class
 
     public KVServer(InMemoryStorage storage, int port) throws IOException {
         this.storage = storage;
@@ -110,8 +111,8 @@ public class KVServer {
                         writer.println();
                         break;
                     case "SET":
-                    // method overloading if ttl (time to live) is provided 
-                    //  ttl is in seconds.
+                        // method overloading if ttl (time to live) is provided
+                        // ttl is in seconds.
                         if (parts.length == 4) {
                             int ttl = Integer.parseInt(parts[3]);
                             storage.set(parts[1], parts[2], ttl);
@@ -160,6 +161,21 @@ public class KVServer {
                     case "TTL":
                         String ttl = storage.TTL(parts[1]);
                         writer.println(ttl);
+                        writer.println();
+                        break;
+                    case "SUBSCRIBE":
+                        pubSub.subscribe(parts[1], message -> writer.println("Received: " + message));
+                        writer.println("OK");
+                        writer.println();
+                        break;
+                    case "UNSUBSCRIBE":
+                        pubSub.unsubscribe(parts[1], message -> writer.println("Received: " + message));
+                        writer.println("OK");
+                        writer.println();
+                        break;
+                    case "PUBLISH":
+                        pubSub.publish(parts[1], parts[2]);
+                        writer.println("OK");
                         writer.println();
                         break;
                     case "HELP":

@@ -13,14 +13,22 @@ public class KVClient {
         this.socket = new Socket(host, port);
         this.writer = new PrintWriter(socket.getOutputStream(), true);
         this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+        // start a new thread that constantly reads the responses from the server
+        new Thread(() -> {
+            String response;
+            try {
+                while ((response = reader.readLine()) != null) {
+                    System.out.println(response);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
-    public void sendCommand(String command) throws IOException {
+    public void sendCommand(String command) {
         writer.println(command);
-        String response;
-        while ((response = reader.readLine()) != null && !response.isEmpty()) {
-            System.out.println(response);
-        }
     }
 
     public void close() throws IOException {
