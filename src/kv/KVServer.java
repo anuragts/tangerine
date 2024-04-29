@@ -32,7 +32,7 @@ public class KVServer {
 
         // Schedule the snapshot task to run every 120 seconds
         snapshotExecutor.scheduleAtFixedRate(() -> globSnapShot.saveToGlob(JSONParser.parseJSON(storage.seeAll())), 0,
-                120, TimeUnit.SECONDS);
+                20, TimeUnit.SECONDS);
         // Initialize GlobSnapShot and load the existing data
         Map<String, String> existingData = globSnapShot.readSnapshot();
         for (Map.Entry<String, String> entry : existingData.entrySet()) {
