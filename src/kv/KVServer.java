@@ -20,7 +20,6 @@ public class KVServer {
     private PubSub pubSub = new PubSub();
     private Map<String, PrintWriter> clientWriters = new HashMap<>();
 
-
     public KVServer(InMemoryStorage storage, int port) throws IOException {
         this.storage = storage;
         this.serverSocket = new ServerSocket(port);
@@ -124,6 +123,7 @@ public class KVServer {
                             System.out.println("TTL set to " + ttl);
                         } else {
                             storage.set(parts[1], parts[2]);
+                            System.out.println("SET command executed");
                         }
                         writer.println("OK");
                         writer.println();
@@ -176,18 +176,21 @@ public class KVServer {
                     // pub sub implementation
                     case "SUBSCRIBE":
                         PrintWriter writers = new PrintWriter(socket.getOutputStream(), true);
-                        clientWriters.put(parts[1], writers);
-                        pubSub.subscribe(parts[1], new PubSub.Subscriber() {
-                            @Override
-                            public void receive(String topic, String message) {
-                                PrintWriter clientWriter = clientWriters.get(topic);
-                                if (clientWriter != null) {
-                                    clientWriter.println("New message on topic " + topic + ": " + message);
-                                    clientWriter.println();
+                        if (!clientWriters.containsKey(parts[1])) {
+                            clientWriters.put(parts[1], writers);
+                            pubSub.subscribe(parts[1], new PubSub.Subscriber() {
+                                @Override
+                                public void receive(String topic, String message) {
+                                    PrintWriter clientWriter = clientWriters.get(topic);
+                                    if (clientWriter != null) {
+                                        clientWriter.println("New message on topic " + topic + ": " + message);
+                                    }
                                 }
-                            }
-                        });
-                        writer.println("OK");
+                            }, writer);
+                            writer.println("OK");
+                        } else {
+                            writer.println("Already subscribed to topic " + parts[1]);
+                        }
                         writer.println();
                         break;
                     case "PUBLISH":
@@ -202,10 +205,11 @@ public class KVServer {
                             public void receive(String topic, String message) {
                                 // handle message reception here
                             }
-                        });
+                        }, writer);
                         writer.println("OK");
                         writer.println();
                         break;
+
                     default:
                         writer.println("Unknown command");
                         writer.println();

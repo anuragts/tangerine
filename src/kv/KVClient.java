@@ -2,7 +2,6 @@ package kv;
 
 import java.io.*;
 import java.net.*;
-import java.util.*;
 
 public class KVClient {
     private Socket socket;
@@ -18,7 +17,8 @@ public class KVClient {
 
         // Start a new thread that listens for responses from the server
 
-        // Problem with sockets, they block the thread and you can't execute more commands.
+        // Problem with sockets, they block the thread and you can't execute more
+        // commands.
         this.listenerThread = new Thread(() -> {
             try {
                 String response;
@@ -34,8 +34,6 @@ public class KVClient {
 
     public void sendCommand(String command) throws IOException {
         writer.println(command);
-        String response = reader.readLine();
-        System.out.println(response);
     }
 
     public void close() throws IOException {
@@ -54,7 +52,13 @@ public class KVClient {
             System.out.print("tangerine-cli> ");
             input = consoleReader.readLine();
             System.out.println();
-            client.sendCommand(input);
+            if ("quit".equalsIgnoreCase(input)) {
+                client.close();
+                break;
+            } else {
+                client.sendCommand(input);
+            }
         }
+
     }
 }
