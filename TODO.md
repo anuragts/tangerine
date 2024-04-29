@@ -18,6 +18,7 @@
 - Queue support
 - [X] Pub Sub   (unsubscribe does not work)
 - Transactions
+- [] Vector DB
 - Persistence
 - Tangerine config file
 - Binary Executables, Dockerise 
