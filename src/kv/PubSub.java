@@ -25,7 +25,7 @@ public class PubSub {
             }
         }
     }
-
+    
     public interface Subscriber {
         void receive(String message);
     }
