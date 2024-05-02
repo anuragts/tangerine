@@ -33,7 +33,12 @@ Running the Tangerine-KV Client
 ```bash
  ./tangerinekv-cli.sh
 ```
-
+Testing 
+```bash
+$ SET key value
+```
+if server responds with `OK`, then the client & server is working.
+ 
 ### Using Docker
 
 Pulling the image
@@ -49,12 +54,6 @@ Building the Docker Image
 ```bash
 docker build -t anuragdev123/tangerine-kv:latest .
 ```
-
-Testing 
-```bash
-$ SET key value
-```
-if server responds with `OK`, then the client & server is working.
 
 ### Commands
 
