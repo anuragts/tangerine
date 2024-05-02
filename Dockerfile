@@ -1,4 +1,4 @@
-FROM openjdk:8-jre
+FROM openjdk:11-jdk
 
 WORKDIR /app
 
@@ -6,6 +6,6 @@ COPY . .
 
 RUN chmod +x tangerinekv-server.sh
 
-RUN tangerinekv-server.sh
+CMD ["./tangerinekv-server.sh"]
 
 EXPOSE 1111
