@@ -34,6 +34,22 @@ Running the Tangerine-KV Client
  ./tangerinekv-cli.sh
 ```
 
+### Using Docker
+
+Pulling the image
+```bash
+docker pull anuragdev123/tangerine-kv:latest
+```
+Running the Tangerine-KV Server
+```bash
+docker run -p 1111:1111 anuragdev123/tangerine-kv:latest 
+```
+
+Building the Docker Image
+```bash
+docker build -t anuragdev123/tangerine-kv:latest .
+```
+
 Testing 
 ```bash
 $ SET key value
