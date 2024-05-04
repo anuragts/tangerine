@@ -17,10 +17,13 @@
 - Multiple DB Support
 - Queue support
 - [X] Pub Sub   (unsubscribe does not work)
+- Check B+ trees video of Arpit Bhayani and implement it.
 - Transactions
 - [] Vector DB
 - Persistence
 - Tangerine config file
-- Binary Executables, Dockerise 
+- Binary Executables
+- [X] Dockerise 
+- [X] Website
 - Node SDK
 - Cloud Support
