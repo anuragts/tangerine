@@ -6,7 +6,16 @@ tangerine is a in-memory vector database that is designed to have fast read and 
 tangerine is not limited to vector database, as it has its own key-value store written from scratch in Java.
 
 ## Key-Value Store
-### Running
+
+### Installation and Running.
+
+#### Using Docker
+
+```bash
+docker run -p 1111:1111 anuragdev123/tangerine-kv:latest
+```
+
+#### Manual Installation
 
 Making sh executable
 ```bash
@@ -39,21 +48,6 @@ $ SET key value
 ```
 if server responds with `OK`, then the client & server is working.
  
-### Using Docker
-
-Pulling the image
-```bash
-docker pull anuragdev123/tangerine-kv:latest
-```
-Running the Tangerine-KV Server
-```bash
-docker run -p 1111:1111 anuragdev123/tangerine-kv:latest 
-```
-
-Building the Docker Image
-```bash
-docker build -t anuragdev123/tangerine-kv:latest .
-```
 
 ### Commands
 
